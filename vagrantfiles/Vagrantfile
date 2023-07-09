@@ -1,0 +1,28 @@
+Vagrant.configure("2") do |config|
+  # Setting up variables
+  # This is from the allowed ranges for host-only
+  subnet = "192.168.56"
+  ip_address = 10
+
+  # Setting up resources
+  config.vm.provider "virtualbox" do |vb|
+    vb.cpus = 2
+    vb.memory = 2048
+  end
+  
+  # Setting up worker nodes
+  (1..2).each do |i|
+    config.vm.define "ubuntu-000#{i}" do |ubuntu|
+      ubuntu.vm.box = "ubuntu/trusty64"
+      ubuntu.vm.network "private_network", ip: "#{subnet}.#{ip_address + i}"
+    end
+  end
+
+
+  (1..2).each do |i|
+    config.vm.define "centos-000#{i}" do |centos|
+      centos.vm.box = "centos/7"
+      centos.vm.network "private_network", ip: "#{subnet}.#{ip_address + i + 100}" # Note: Make sure no to not have overlapping ips incase you want to launch more than 10 nodes
+    end 
+  end
+end
