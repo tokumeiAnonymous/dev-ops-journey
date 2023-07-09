@@ -1,0 +1,18 @@
+Vagrant.configure("2") do |config|
+  # Setting up resources
+  config.vm.provider "virtualbox" do |vb|
+    vb.cpus = 2
+    vb.memory = 2048
+  end
+
+  # Setting master nodes
+  config.vm.define "ubuntu-master-0001" do |ubuntu|
+    ubuntu.vm.box = "ubuntu/trusty64"
+    ubuntu.vm.network "private_network", ip: "192.168.56.2"
+  end
+
+  config.vm.define "centos-master-0001" do |centos|
+    centos.vm.box = "centos/7"
+    centos.vm.network "private_network", ip: "192.168.56.3"
+  end
+end
